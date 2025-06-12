@@ -19,12 +19,8 @@ export const CameraControls = ({uri, onToggleFacing, onTakePicture, onNavigate}:
             onPress={() => { onNavigate() }}
           >
             <Image
-              key={uri || "empty"}
-              source={
-                uri
-                  ? { uri }
-                  : require('@/assets/empty.jpeg')
-              }
+              key={uri ? `photo-${uri}` : 'empty'}
+              source={uri ? { uri } : require('@/assets/empty.jpeg')}
               style={styles.lastPhotoSquare}
             />
           </Pressable>

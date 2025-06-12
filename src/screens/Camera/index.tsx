@@ -1,11 +1,12 @@
 import { PermissionRequest } from '@/src/components/PermissionRequest';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraType, FlashMode, useCameraPermissions } from 'expo-camera';
+import * as FileSystem from 'expo-file-system';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, View } from 'react-native';
 import { CameraPreview } from '../../components/CameraPreview';
 
-const PHOTOS_KEY = 'photos_uris';
+const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
+const PHOTOS_JSON = PHOTOS_DIR + 'photos.json';
 
 export const CameraScreen = () => {
   const [permission, requestPermission] = useCameraPermissions();
@@ -14,18 +15,22 @@ export const CameraScreen = () => {
   const [lastPhotoUri, setLastPhotoUri] = useState<string | null>(null);
 
   const getLastPhoto = async () => {
-    try {
-      const json = await AsyncStorage.getItem(PHOTOS_KEY);
-      const photoObjects = json ? JSON.parse(json) : [];
-      if (photoObjects.length === 0) {
-        return null;
-      }
-      return photoObjects[0].uri;
-    } catch (error) {
-      console.error('Erro ao buscar última foto do AsyncStorage:', error);
+  try {
+    const jsonInfo = await FileSystem.getInfoAsync(PHOTOS_JSON);
+    if (!jsonInfo.exists) {
       return null;
     }
-  };
+    const json = await FileSystem.readAsStringAsync(PHOTOS_JSON);
+    const photoObjects = json ? JSON.parse(json) : [];
+    if (photoObjects.length === 0) {
+      return null;
+    }
+    return photoObjects[0].uri;
+  } catch (error) {
+    console.error('Erro ao buscar última foto do file system:', error);
+    return null;
+  }
+};
 
   useEffect(() => {
     const fetchLastPhoto = async () => {

@@ -2,30 +2,37 @@ import { PhotoComponent } from '@/src/components/Photo';
 import { PhotoDetail } from '@/src/components/PhotoDetails';
 import { PhotoHeader } from '@/src/components/PhotoHeader';
 import { Photo, RootStackParams } from '@/src/types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
 import { styles } from './styles';
 
-const PHOTOS_KEY = 'photos_uris';
+import * as FileSystem from 'expo-file-system';
+
+const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
+const PHOTOS_JSON = PHOTOS_DIR + 'photos.json';
 
 export const PhotoScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const route = useRoute();
   const { uri, returnScreen } = (route as any).params;
-
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const getPhotos = async () => {
       try {
-        const json = await AsyncStorage.getItem(PHOTOS_KEY);
+        const jsonInfo = await FileSystem.getInfoAsync(PHOTOS_JSON);
+        if (!jsonInfo.exists) {
+          setPhotos([]);
+          setCurrentIndex(0);
+          return;
+        }
+        const json = await FileSystem.readAsStringAsync(PHOTOS_JSON);
         const photoObjects = json ? JSON.parse(json) : [];
         setPhotos(photoObjects);
-        const index = photoObjects.findIndex((item: Photo) => item.uri === uri);
+        const index: number = photoObjects.findIndex((item: Photo) => item.uri === uri);
         setCurrentIndex(index >= 0 ? index : 0);
       } catch (error) {
         console.error('Erro ao buscar informações das fotos:', error);
