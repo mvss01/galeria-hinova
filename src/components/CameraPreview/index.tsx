@@ -22,39 +22,57 @@ const PHOTOS_KEY = 'photos_uris';
 
 export const CameraPreview = ({ facing, onToggleFacing, flash, onToggleFlash, lastPhoto }: CameraPreviewProps) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
- const { latitude, longitude } = useLocationWatcher(10000);
+  const { latitude, longitude } = useLocationWatcher(10000);
   const cameraRef = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(lastPhoto || require('@/assets/empty.jpeg'));
+  const [showFrontFlash, setShowFrontFlash] = useState(false);
 
   const takePicture = async () => {
-    try {
-      const photo = await cameraRef.current?.takePictureAsync();
-      if (photo?.uri) {
-        const date = new Date().toLocaleString();
-
-        const json = await AsyncStorage.getItem(PHOTOS_KEY);
-        const photos = json ? JSON.parse(json) : [];
-
-        const updatedPhotos: Photo[] = [
-          { uri: photo.uri, date, latitude, longitude},
-          ...photos,
-        ];
-
-        await AsyncStorage.setItem(PHOTOS_KEY, JSON.stringify(updatedPhotos));
-
-        setUri(photo.uri);
-      }
-    } catch (error) {
-      console.error('Erro ao tirar foto:', error);
-      Alert.alert('Erro', 'Não foi possível tirar a foto.');
+  try {
+    if (facing === "front" && flash === "on") {
+      setShowFrontFlash(true);
+      await new Promise(resolve => setTimeout(resolve, 180));
     }
-  };
+
+    const photo = await cameraRef.current?.takePictureAsync();
+    if (photo?.uri) {
+      const date = new Date().toLocaleString();
+
+      const json = await AsyncStorage.getItem(PHOTOS_KEY);
+      const photos = json ? JSON.parse(json) : [];
+
+      const updatedPhotos: Photo[] = [
+        { uri: photo.uri, date, latitude, longitude },
+        ...photos,
+      ];
+
+      await AsyncStorage.setItem(PHOTOS_KEY, JSON.stringify(updatedPhotos));
+
+      setUri(photo.uri);
+    }
+  } catch (error) {
+    console.error('Erro ao tirar foto:', error);
+    Alert.alert('Erro', 'Não foi possível tirar a foto.');
+  } finally {
+    setShowFrontFlash(false);
+  }
+};
+
 
   return (
     <View style={styles.container}>
 
       <CameraView ref={cameraRef} style={styles.camera} facing={facing} flash={flash}/>
 
+      {showFrontFlash && (
+        <View style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: '#fff',
+          opacity: 0.85,
+          zIndex: 999,
+        }}/>
+      )}
       <CameraHeader flash={flash} onNavigate={() =>  navigation.replace("gallery")} onToggleFlash={() => onToggleFlash()}/>
 
       <CameraControls

@@ -36,7 +36,6 @@ export function useLocationWatcher(interval = 10000) {
       }
     };
 
-    // Solicita permissão e inicia o intervalo
     (async () => {
         await getLocation();
         intervalRef.current = setInterval(getLocation, interval);
