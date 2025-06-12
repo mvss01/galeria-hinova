@@ -18,7 +18,7 @@ export const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, loading, loadMore,
   const imageSize = Dimensions.get('window').width / numColumns;
 
   const renderItem = ({ item }: { item: string }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('photo', { uri: item })}>
+    <TouchableOpacity onPress={() => navigation.navigate("photo", { uri: item, returnScreen: "gallery" })}>
       <Image
         source={{ uri: item }}
         style={{ width: imageSize, height: imageSize, margin: 1, backgroundColor: '#eee' }}

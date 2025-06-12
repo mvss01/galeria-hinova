@@ -1,11 +1,13 @@
-import { Photo } from "@/src/types";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useLocationWatcher } from "@/src/Hooks/useLocationWatcher";
+import { Photo, RootStackParams } from "@/src/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { CameraType, CameraView, FlashMode } from 'expo-camera';
-import { Image } from "expo-image";
-import * as Location from 'expo-location';
 import React, { useRef, useState } from 'react';
-import { Alert, Pressable, View } from 'react-native';
+import { Alert, View } from 'react-native';
+import { CameraControls } from "../CameraControls";
+import { CameraHeader } from "../CameraHeader";
 import { styles } from './styles';
 
 interface CameraPreviewProps {
@@ -19,89 +21,48 @@ interface CameraPreviewProps {
 const PHOTOS_KEY = 'photos_uris';
 
 export const CameraPreview = ({ facing, onToggleFacing, flash, onToggleFlash, lastPhoto }: CameraPreviewProps) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+ const { latitude, longitude } = useLocationWatcher(10000);
   const cameraRef = useRef<CameraView>(null);
-  const [uri, setUri] = useState<string | null>(null);
+  const [uri, setUri] = useState<string | null>(lastPhoto || require('@/assets/empty.jpeg'));
 
   const takePicture = async () => {
-  try {
-    const photo = await cameraRef.current?.takePictureAsync();
-    if (photo?.uri) {
-      const date = new Date().toLocaleString();
-      let latitude = null;
-      let longitude = null;
-      const location = await Location.getCurrentPositionAsync({});
-      latitude = location.coords.latitude;
-      longitude = location.coords.longitude;
+    try {
+      const photo = await cameraRef.current?.takePictureAsync();
+      if (photo?.uri) {
+        const date = new Date().toLocaleString();
 
+        const json = await AsyncStorage.getItem(PHOTOS_KEY);
+        const photos = json ? JSON.parse(json) : [];
 
-      const json = await AsyncStorage.getItem(PHOTOS_KEY);
-      const photos = json ? JSON.parse(json) : [];
+        const updatedPhotos: Photo[] = [
+          { uri: photo.uri, date, latitude, longitude},
+          ...photos,
+        ];
 
-      const updatedPhotos: Photo[] = [
-        { uri: photo.uri, date, latitude, longitude},
-        ...photos,
-      ];
+        await AsyncStorage.setItem(PHOTOS_KEY, JSON.stringify(updatedPhotos));
 
-      await AsyncStorage.setItem(PHOTOS_KEY, JSON.stringify(updatedPhotos));
-
-      setUri(photo.uri);
+        setUri(photo.uri);
+      }
+    } catch (error) {
+      console.error('Erro ao tirar foto:', error);
+      Alert.alert('Erro', 'Não foi possível tirar a foto.');
     }
-  } catch (error) {
-    console.error('Erro ao tirar foto:', error);
-    Alert.alert('Erro', 'Não foi possível tirar a foto.');
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
 
       <CameraView ref={cameraRef} style={styles.camera} facing={facing} flash={flash}/>
 
-      <View style={styles.header}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.flashButton,
-            { opacity: pressed ? 0.5 : 1 },
-            styles.flashButton
-          ]}
-          onPress={onToggleFlash}
-        >
-          <Ionicons name={flash === "on" ? "flash-off-outline" : "flash-outline"} size={32} color="#fff" />
-        </Pressable>
-      </View>
+      <CameraHeader flash={flash} onNavigate={() =>  navigation.replace("gallery")} onToggleFlash={() => onToggleFlash()}/>
 
-      <View style={styles.controlsContainer}>
-        <Image
-          source={
-            uri
-              ? { uri }
-              : lastPhoto
-                ? { uri: lastPhoto }
-                : require('@/assets/empty.jpeg')
-          }
-          contentFit="cover"
-          style={styles.lastPhotoSquare}
-        />
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.captureCircle,
-            { opacity: pressed ? 0.5 : 1 },
-            styles.captureCircle
-         ]}
-          onPress={takePicture}
-        />
-        <Pressable
-          style={({ pressed }) => [
-            styles.switchButton,
-            { opacity: pressed ? 0.5 : 1 },
-            styles.switchButton
-          ]}
-          onPress={onToggleFacing}
-        >
-          <MaterialCommunityIcons name="camera-flip-outline" size={24} color="#fff" />
-        </Pressable>
-      </View>
+      <CameraControls
+        uri={uri}
+        onTakePicture={() => takePicture()}
+        onToggleFacing={() => onToggleFacing()}
+        onNavigate={() => navigation.replace("photo", { uri: uri ?? '', returnScreen: 'camera' })}
+      />
 
     </View>
   );

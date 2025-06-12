@@ -2,27 +2,6 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1
-  },
-  header: {
-    position: 'absolute',
-    top: 48,
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-  },
-  backButton: {
-    padding: 8,
-  },
-  flashButton: {
-    padding: 8,
-  },
-  camera: {
-    flex: 1
-  },
-  controlsContainer: {
     position: 'absolute',
     paddingHorizontal: '8%',
     bottom: 48,
@@ -45,7 +24,7 @@ export const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: 'rgba(0,0,0,0.5)'
   },
-  switchButton: {
+  switchCameraButton: {
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 32,
     padding: 16

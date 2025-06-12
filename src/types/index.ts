@@ -7,6 +7,6 @@ export interface Photo {
 
 export type RootStackParams = {
   camera: undefined;
-  photo: { uri: string };
+  photo: { uri: string, returnScreen: string };
   gallery: undefined;
 };
