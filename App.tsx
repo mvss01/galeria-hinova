@@ -1,15 +1,39 @@
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter';
+import { ShantellSans_700Bold } from '@expo-google-fonts/shantell-sans';
+import { useForegroundPermissions } from 'expo-location';
+import * as NavigationBar from 'expo-navigation-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
-// import { TasksProvider } from "./src/contexts";
+import { Platform } from 'react-native';
 import { Routes } from "./src/routes";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [locationPermission, requestLocationPermission] = useForegroundPermissions();
+
   const [loaded, error] = useFonts({
-    Inter_600SemiBold
+    Inter_600SemiBold,
+    ShantellSans_700Bold
   });
+
+  useEffect(() => {
+    async function verifyAndGetPermissions() {
+      if (!locationPermission || locationPermission.status !== 'granted') {
+        await requestLocationPermission();
+      }
+    }
+
+    async function setup() {
+      if (Platform.OS === 'android') {
+        NavigationBar.setPositionAsync('absolute');
+        NavigationBar.setBackgroundColorAsync('#ffffff00');
+        await verifyAndGetPermissions();
+      }
+    }
+
+    setup();
+  }, [locationPermission, requestLocationPermission]);
 
   useEffect(() => {
     if (loaded || error) {
@@ -22,8 +46,6 @@ export default function App() {
   }
 
   return (
-    // <TasksProvider>
-      <Routes />
-    // </TasksProvider>
+    <Routes />
   );
 }

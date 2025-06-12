@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "galeria-hinova",
+    "name": "Galeria Hinova",
     "slug": "galeria-hinova",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/hinova-galeria.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/hinova-galeria.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,15 +16,36 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/hinova-galeria.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.ACCESS_MEDIA_LOCATION"
+      ],
+      "package": "com.mvss_01.galeriahinova"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/hinova-galeria.png"
     },
     "plugins": [
-      "expo-font"
-    ]
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permitir que $(PRODUCT_NAME) acesse sua câmera?",
+          "microphonePermission": "Permitir que $(PRODUCT_NAME) acesse seu microfone?",
+          "recordAudioAndroid": false
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e723f950-2362-461b-86c6-22b709528c7b"
+      }
+    }
   }
 }
