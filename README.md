@@ -31,16 +31,22 @@ Este é um aplicativo desenvolvido com **React Native** e **Expo**, que permite 
 
 ### 📷 Câmera
 
-![Tela da Câmera sem Permissão](./assets/Screenshots/camera_screen_unallowed.jpg)
-![Tela da Câmera sem Miniatura](./assets/Screenshots/camera_screen.jpg)
+<p align="center">
+   <img src="./assets/Screenshots/camera_screen_unallowed.jpg" alt="Tela da Câmera sem Permissão" width="300"/>
+   <img src="./assets/Screenshots/camera_screen.jpg" alt="Tela da Câmera sem Miniatura" width="300"/>
+</p>
 
 ### 🔎 Detalhes da Foto
 
-![Tela de Visualização](./assets/Screenshots/photo_detail.jpg)
+<p align="center">
+   <img src="./assets/Screenshots/photo_detail.jpg" alt="Tela de Visualização" width="300"/>
+</p>
 
 ### 🖼️ Galeria
-![Tela da Galeria sem Imagens](./assets/Screenshots/gallery_empty.jpg)
-![Tela da Galeria com Imagens](./assets/Screenshots/gallery.jpg)
+<p align="center">
+   <img src="./assets/Screenshots/gallery_empty.jpg" alt="Tela da Galeria sem Imagens" width="300"/>
+   <img src="./assets/Screenshots/gallery.jpg" alt="Tela da Galeria com Imagens" width="300"/>
+</p>
 
 ---
 
