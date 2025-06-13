@@ -31,7 +31,7 @@ export const GalleryScreen = () => {
       setPhotos(uris);
     } catch (error) {
       setPhotos([]);
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

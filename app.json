@@ -40,6 +40,12 @@
           "microphonePermission": "Permitir que $(PRODUCT_NAME) acesse seu microfone?",
           "recordAudioAndroid": false
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Permitir que $(PRODUCT_NAME) acesse sua localização?"
+        }
       ]
     ],
     "extra": {

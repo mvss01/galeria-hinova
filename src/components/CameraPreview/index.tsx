@@ -1,4 +1,3 @@
-import { useLocationWatcher } from "@/src/Hooks/useLocationWatcher";
 import { RootStackParams } from "@/src/types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -6,6 +5,7 @@ import { CameraType, CameraView, FlashMode } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import React, { useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
+import { useLocation } from '../../Context/LocationContext';
 import { CameraControls } from "../CameraControls";
 import { CameraHeader } from "../CameraHeader";
 import { styles } from './styles';
@@ -22,12 +22,11 @@ const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 const PHOTOS_JSON = PHOTOS_DIR + 'photos.json';
 
 export const CameraPreview = ({ facing, onToggleFacing, flash, onToggleFlash, lastPhoto }: CameraPreviewProps) => {
-
+  const { latitude, longitude } = useLocation();
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
-  const { latitude, longitude } = useLocationWatcher(10000);
+
   const cameraRef = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(lastPhoto);
-
   React.useEffect(() => {
     setUri(lastPhoto);
   }, [lastPhoto]);
@@ -61,7 +60,7 @@ export const CameraPreview = ({ facing, onToggleFacing, flash, onToggleFlash, la
         }
 
         const updatedPhotos = [
-          { uri: destUri, date, latitude, longitude },
+          { uri: destUri, date, latitude: latitude, longitude: longitude },
           ...photos,
         ];
 

@@ -5,17 +5,18 @@ import * as NavigationBar from 'expo-navigation-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
 import { Platform } from 'react-native';
+import { LocationProvider } from './src/Context/LocationContext';
 import { Routes } from "./src/routes";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [locationPermission, requestLocationPermission] = useForegroundPermissions();
 
   const [loaded, error] = useFonts({
     Inter_600SemiBold,
     ShantellSans_700Bold
   });
+  const [locationPermission, requestLocationPermission] = useForegroundPermissions();
 
   useEffect(() => {
     async function verifyAndGetPermissions() {
@@ -46,6 +47,8 @@ export default function App() {
   }
 
   return (
-    <Routes />
+    <LocationProvider>
+      <Routes />
+    </LocationProvider>
   );
 }
