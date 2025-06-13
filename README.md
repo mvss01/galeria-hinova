@@ -31,16 +31,16 @@ Este é um aplicativo desenvolvido com **React Native** e **Expo**, que permite 
 
 ### 📷 Câmera
 
-![Tela da Câmera sem Permissão](./assets/screenshots/camera_screen_unallowed.jpg)
-![Tela da Câmera sem Miniatura](./assets/screenshots/camera_screen.jpg)
+![Tela da Câmera sem Permissão](./assets/Screenshots/camera_screen_unallowed.jpg)
+![Tela da Câmera sem Miniatura](./assets/Screenshots/camera_screen.jpg)
 
 ### 🔎 Detalhes da Foto
 
-![Tela de Visualização](./assets/screenshots/photo_detail.jpg)
+![Tela de Visualização](./assets/Screenshots/photo_detail.jpg)
 
 ### 🖼️ Galeria
-![Tela da Galeria sem Imagens](./assets/screenshots/gallery_empty.jpg)
-![Tela da Galeria com Imagens](./assets/screenshots/gallery.jpg)
+![Tela da Galeria sem Imagens](./assets/Screenshots/gallery_empty.jpg)
+![Tela da Galeria com Imagens](./assets/Screenshots/gallery.jpg)
 
 ---
 
@@ -83,6 +83,7 @@ Realize um build para Android:
 ```
 eas build --profile development --platform android
 ```
+Instale a build em seu smartphone lendo o qrcode no console.
 
 Execute o projeto:
 ```
