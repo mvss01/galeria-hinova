@@ -26,18 +26,18 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           return;
         }
         subscription = await Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          timeInterval: 5000,
-          distanceInterval: 0,
-        },
-        (loc) => {
-          setLocation({
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-          });
-        }
-      );
+          {
+            accuracy: Location.Accuracy.BestForNavigation,
+            timeInterval: 5000,
+            distanceInterval: 0,
+          },
+          (loc) => {
+            setLocation({
+              latitude: loc.coords.latitude,
+              longitude: loc.coords.longitude,
+            });
+          }
+        );
 
       } catch (err) {
         console.warn('Erro ao obter localização:', err);

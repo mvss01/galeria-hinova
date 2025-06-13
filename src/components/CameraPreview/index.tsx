@@ -97,7 +97,7 @@ export const CameraPreview = ({ facing, onToggleFacing, flash, onToggleFlash, la
         uri={uri}
         onTakePicture={() => takePicture()}
         onToggleFacing={() => onToggleFacing()}
-        onNavigate={() => navigation.replace("photo", { uri: uri ?? '', returnScreen: 'camera' })}
+        onNavigate={() => {if (!uri) return;navigation.replace("photo", { uri, returnScreen: 'camera' })}}
       />
 
     </View>

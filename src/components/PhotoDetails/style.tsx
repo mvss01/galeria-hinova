@@ -20,10 +20,21 @@ export const styles = StyleSheet.create({
         fontWeight: "600",
         marginTop: 8,
     },
+    coordinate: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8
+    },
     value: {
         fontSize: 16,
         color: "#222",
         fontWeight: "bold",
         marginBottom: 4,
     },
+    image: {
+        height: 72,
+        width: 72,
+        resizeMode: 'contain',
+        alignSelf: 'flex-start',
+    }
 });
