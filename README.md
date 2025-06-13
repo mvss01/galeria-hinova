@@ -1,50 +1,119 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+---
 
-## Get started
+# 📸 Camera App com Geolocalização e Timestamp
 
-1. Install dependencies
+Este é um aplicativo desenvolvido com **React Native** e **Expo**, que permite a **captura de fotos com localização (GPS) e timestamp**. As imagens são armazenadas localmente e o app conta com diversos recursos para melhorar a navegação e a usabilidade.
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## ✨ Funcionalidades
 
-   ```bash
-   npx expo start
-   ```
+* 📷 **Captura de fotos** com:
 
-In the output, you'll find options to open the app in a
+  * 📍 Coordenadas de **localização** (latitude e longitude)
+  * 🕓 Registro da **data e hora** exata da captura
+* 💡 **Flash** com opção de ativar/desativar e suporte a:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+  * 🔦Simulação de **flash frontal** via sobreposição branca na tela (efeito de iluminação)
+* 🔄 Alternância entre câmera **frontal** e **traseira**
+* 🗺️ Link direto para abrir a localização no **Google Maps**
+* 📌 Botão para **copiar as coordenadas**
+* 🧭 Solicitação automática de **permissão de localização**
+* ✅ Solicitação de **permissão da câmera** com tela de autorização
+* 🖼️ Exibição da **última foto capturada** como miniatura
+* 📂 **Armazenamento local** com persistência usando `expo-file-system`
+* 🔍 Navegação entre fotos com **scroll horizontal** na tela de detalhes
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 📱 Imagens do App
 
-When you're ready, run:
+### 📷 Câmera
 
-```bash
-npm run reset-project
+![Tela da Câmera sem Permissão](./assets/screenshots/camera_screen_unallowed.jpg)
+![Tela da Câmera sem Miniatura](./assets/screenshots/camera_screen.jpg)
+
+### 🔎 Detalhes da Foto
+
+![Tela de Visualização](./assets/screenshots/photo_detail.jpg)
+
+### 🖼️ Galeria
+![Tela da Galeria sem Imagens](./assets/screenshots/gallery_empty.jpg)
+![Tela da Galeria com Imagens](./assets/screenshots/gallery.jpg)
+
+---
+
+## 🚀 Como executar o projeto
+
+Este projeto utiliza **EAS (Expo Application Services)** para build e testes.
+
+### ✅ Requisitos
+
+* **Node.js** (>= 18)
+* **Expo CLI** (>= 3.13.0)
+* **EAS CLI** (`npm install -g eas-cli`)
+* Conta na [Expo.dev](https://expo.dev/)
+* Emulador Android ou dispositivo físico com permissões
+
+### ⚙️ Instalação
+
+Clone o repositório:
+
+```
+git clone https://github.com/mvss01/galeria-hinova.git
+cd galeria-hinova
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Instale as dependências:
 
-## Learn more
+```
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Configure o EAS:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+eas login
+eas build:configure --platform android
+````
 
-## Join the community
+Realize um build para Android:
 
-Join our community of developers creating universal apps.
+```
+eas build --profile development --platform android
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Execute o projeto:
+```
+npx expo start
+```
+---
+
+## 🔐 Permissões Utilizadas
+
+Este app solicita as seguintes permissões nativas:
+
+* **CAMERA** – Captura de imagens
+* **LOCATION** – Localização durante o uso do app
+
+> As permissões são solicitadas em tempo de execução, com fallback para telas de alerta caso o usuário negue.
+
+---
+
+## 🛠️ Observações Técnicas
+
+* A **localização GPS** é gerenciada via **Context API**, garantindo que os dados de latitude e longitude estejam atualizados globalmente.
+  O contexto (`LocationContext`) é alimentado por um *observer* (`watchPositionAsync`) com alta precisão e intervalo de 5 segundos. Assim, qualquer componente que utilize o hook `useLocation()` tem acesso à posição atual.
+
+* O armazenamento das imagens é feito localmente no sandbox do app com `expo-file-system`, preservando os dados mesmo após reinicialização.
+
+* A tela de **galeria** permite navegar horizontalmente entre as fotos capturadas, exibindo:
+
+  * Timestamp detalhado
+  * Coordenadas GPS
+  * Botões para copiar localização ou abrir diretamente no Google Maps
+
+* A tela da câmera exibe em tempo real a última foto tirada no canto da tela e conta com controles intuitivos para flash e troca de câmera.
+
+---

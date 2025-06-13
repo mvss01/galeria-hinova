@@ -5,7 +5,7 @@ import * as NavigationBar from 'expo-navigation-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
 import { Platform } from 'react-native';
-import { LocationProvider } from './src/Context/LocationContext';
+import { LocationProvider } from './src/context/LocationContext';
 import { Routes } from "./src/routes";
 
 SplashScreen.preventAutoHideAsync();

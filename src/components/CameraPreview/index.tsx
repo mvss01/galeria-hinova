@@ -5,7 +5,7 @@ import { CameraType, CameraView, FlashMode } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import React, { useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
-import { useLocation } from '../../Context/LocationContext';
+import { useLocation } from '../../context/LocationContext';
 import { CameraControls } from "../CameraControls";
 import { CameraHeader } from "../CameraHeader";
 import { styles } from './styles';
